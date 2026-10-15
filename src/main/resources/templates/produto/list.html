@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <nav class="d-flex gap-2 justify-content-end mb-3" sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/pedidos}" class="btn btn-outline-primary btn-sm">Pedidos</a>
+        <a th:href="@{/clientes}" class="btn btn-outline-primary btn-sm">Clientes</a>
+        <a th:href="@{/logout}" class="btn btn-outline-secondary btn-sm">Sair</a>
+    </nav>
+    <div class="alert alert-danger" th:if="${erro}" th:text="${erro}"></div>
+    <h1>Produtos</h1>
+    <a class="btn btn-primary mb-3" th:href="@{/produtos/novo}">Novo Produto</a>
+
+    <div class="alert alert-info" th:if="${#lists.isEmpty(produtos)}">Nenhum produto cadastrado.</div>
+
+    <table class="table table-bordered table-striped" th:if="${!#lists.isEmpty(produtos)}">
+        <thead class="thead-dark">
+        <tr>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Preço</th>
+            <th>Quantidade em Estoque</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="produto : ${produtos}">
+            <td th:text="${produto.nome}"></td>
+            <td th:text="${produto.descricao}"></td>
+            <td th:text="${produto.preco}"></td>
+            <td th:text="${produto.quantidadeEmEstoque}"></td>
+            <td>
+                <a class="btn btn-sm btn-warning" th:href="@{/produtos/edit/{id}(id=${produto.id})}">Editar</a>
+                <a class="btn btn-sm btn-danger" th:href="@{/produtos/delete/{id}(id=${produto.id})}">Excluir</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
